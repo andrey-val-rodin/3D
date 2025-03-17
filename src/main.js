@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+const isProduction = import.meta.env.PROD;
 const scene = new THREE.Scene();
 initWorld();
 
@@ -31,17 +32,24 @@ scene.add(directionalLight);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.autoRotateSpeed = 0.2;
-controls.enableZoom = false;
+controls.enableZoom = false; // This doesn't work on mobiles
+controls.maxZoom = 4;
+controls.minZoom = 1;
+controls.touches.TWO = controls.touches.ONE;
 controls.autoRotate = true;
 controls.update();
 
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('jsm/libs/draco/');
+dracoLoader.setDecoderPath(isProduction
+	? 'https://table-360.ru/wp-content/uploads/2025/03/3D/jsm/libs/draco/'
+	: 'jsm/libs/draco/');
 dracoLoader.setDecoderConfig({ type: 'js' });
 loader.setDRACOLoader(dracoLoader);
 
-loader.load( 'ПС.600.Фото.glb', function ( object ) {
+loader.load(isProduction
+	? 'https://table-360.ru/wp-content/uploads/2025/03/ПС.600.Фото.glb'
+	: 'ПС.600.Фото.glb', function (object) {
 	const model = object.scene;
 	model.position.set(-1.22, -1.22, -1.22);
 	scene.add(model);
@@ -53,9 +61,9 @@ window.onresize = () => setSizes();
 
 function setSizes() {
 	const width = container.clientWidth;
-	const height = Math.max(width / 2.5, window.innerHeight/2);
+	const height = Math.max(width / 2.5, window.screen.height / 2);
 	camera.aspect = width / height;
-	camera.zoom = window.innerHeight / window.innerWidth > 1.5 ? 2.8 : 4;
+	camera.zoom = window.screen.height / window.screen.width > 1.5 ? 2.8 : 4;
 	camera.updateProjectionMatrix();
 	renderer.setSize(width, height);
 }
@@ -70,7 +78,9 @@ function initWorld() {
     });
 
 	const imageLoader = new THREE.ImageLoader();
-	imageLoader.load('background.webp', (image) => {
+	imageLoader.load(isProduction
+		? 'https://table-360.ru/wp-content/uploads/2025/03/background.webp'
+		: 'background.webp', (image) => {
         texture.image = image;
         texture.needsUpdate = true;
     });
