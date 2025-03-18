@@ -32,7 +32,7 @@ scene.add(directionalLight);
 
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.autoRotateSpeed = 0.2;
-controls.enableZoom = false; // This doesn't work on mobiles
+controls.enableZoom = false;
 controls.maxZoom = 4;
 controls.minZoom = 1;
 controls.touches.TWO = controls.touches.ONE;
