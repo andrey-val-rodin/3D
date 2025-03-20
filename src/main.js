@@ -52,7 +52,7 @@ loader.load(isProduction
 	? 'https://table-360.ru/wp-content/uploads/2025/03/ПС.600.Фото.glb'
 	: 'ПС.600.Фото.glb', function (object) {
 	const model = object.scene;
-	model.position.set(-1.2758, -1.25, -1.2257);
+	model.position.set(-1.2758, -1.25, -1.2148);
 	scene.add(model);
 	canvas.style['touch-action'] = 'pinch-zoom';
 }, undefined, function ( error ) {
