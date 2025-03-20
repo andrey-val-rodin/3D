@@ -7,7 +7,7 @@ const isProduction = import.meta.env.PROD;
 const scene = new THREE.Scene();
 initWorld();
 
-const container = document.getElementById( 'container' );
+const container = document.getElementById('container');
 const camera = new THREE.PerspectiveCamera(70, 1, 1, 1000);
 camera.position.set(-1.4028079450698143, 0.2287497181721581, 0.2642033983225704);
 
@@ -15,7 +15,8 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setAnimationLoop(animate);
 setSizes();
-container.appendChild(renderer.domElement);
+const canvas = renderer.domElement;
+container.appendChild(canvas);
 
 const ambient = new THREE.AmbientLight(0xffffff, 0.7);
 scene.add(ambient);
@@ -51,8 +52,9 @@ loader.load(isProduction
 	? 'https://table-360.ru/wp-content/uploads/2025/03/ПС.600.Фото.glb'
 	: 'ПС.600.Фото.glb', function (object) {
 	const model = object.scene;
-	model.position.set(-1.22, -1.22, -1.22);
+	model.position.set(-1.2758, -1.25, -1.2257);
 	scene.add(model);
+	canvas.style['touch-action'] = 'pinch-zoom';
 }, undefined, function ( error ) {
 	console.error( error );
 } );
@@ -61,9 +63,9 @@ window.onresize = () => setSizes();
 
 function setSizes() {
 	const width = container.clientWidth;
-	const height = Math.max(width / 2.5, window.screen.height / 2);
+	const height = Math.max(width / 2, window.screen.height / 2);
 	camera.aspect = width / height;
-	camera.zoom = window.screen.height / window.screen.width > 1.5 ? 2.8 : 4;
+	camera.zoom = window.screen.height > window.screen.width ? 2.3 : 3.2;
 	camera.updateProjectionMatrix();
 	renderer.setSize(width, height);
 }
